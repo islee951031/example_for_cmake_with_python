@@ -1,39 +1,13 @@
 import sys, os, shutil, functools
 
-# def search_file_with_keyword(root_dir, keywords):
-#     # Exit if there are no keywords.
-#     if not keywords:
-#         return []
-    
-#     # Inialize the value.
-#     found_files = []
-
-#     # Search the file_path which contain the keywords. 
-#     for dir_path, dirnames, filenames in os.walk(root_dir):
-#         for filename in filenames:
-#             num_of_contained_keyword = 0
-#             for keyword in keywords:
-#                 if keyword in filename:
-#                     num_of_contained_keyword = num_of_contained_keyword + 1
-#             if num_of_contained_keyword == len(keywords):
-#                 found_files.append(os.path.join(root_dir, filename))
-#         for dirname in dirnames:
-#             num_of_contained_keyword = 0
-#             for keyword in keywords:
-#                 if keyword in dirname:
-#                     num_of_contained_keyword = num_of_contained_keyword + 1
-#             if num_of_contained_keyword == len(keywords):
-#                 found_files.append(os.path.join(root_dir, dirname))
-
-#     return found_files
-
 def find_python_dll(root_dir):
     found_file = ""
     for dir_path, _, filenames in os.walk(root_dir):
         for filename in filenames:
-            if "python" in filename and ".dll" in filename:
-                if len(filename) == len("python***.dll"):
-                    found_file = os.path.join(root_dir, filename)
+            if (filename.find("python") == 0) and \
+                (filename.find(".dll") > len("python*")) and \
+                (filename[len("python"):filename.find(".dll")-1].isdecimal()):
+                found_file = os.path.join(root_dir, filename)
     return found_file
 
 def install_logger(name):
@@ -90,12 +64,11 @@ if __name__ == "__main__":
 
     install_DLLS(python_path, build_path)
     install_Lib(python_path, build_path)
-    # dllfile = os.path.join(python_path, "python313.dll")
     dllfile = find_python_dll(python_path)
-    print(dllfile)
 
     if os.path.isfile(dllfile):
-        print("\"python***.dll\" is found.")
+        print("\"python**.dll\" is found.")
+        print(dllfile)
         shutil.copy(dllfile, build_path)
     else:
-        print("\"python***.dll\" is not found.")
+        print("\"python**.dll\" is not found.")

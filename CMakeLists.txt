@@ -6,7 +6,10 @@ set(CMAKE_CXX_EXTENSIONS OFF) #disable extened syntex by compiler
 
 set(MSYS2_MINGW_ROOT_DIR "C:/msys64/mingw64/bin")
 
-project(HelloEmbed)
+project(
+    ExampleForCMakeWithPython
+    VERSION 0.0.0.1
+)
 
 #https://cmake.org/cmake/help/latest/module/FindPython.html
 find_package(Python REQUIRED Development Interpreter)
