@@ -1,5 +1,6 @@
-file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
-        ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
+list(APPEND SRC_FILES
+        main.cpp
+        Python_Wraps.cpp
 )
 
 add_executable(${CMAKE_PROJECT_NAME} ${SRC_FILES})
@@ -15,3 +16,8 @@ if(MSVC)
 else()
         target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -Wall)
 endif()
+
+
+
+add_executable(imgui_example main_example.cpp)
+target_link_libraries(imgui_example PUBLIC imgui_lib)

@@ -6,7 +6,7 @@ set(CMAKE_CXX_EXTENSIONS OFF) #disable extened syntex by compiler
 
 project(
     ExampleForCMakeWithPython
-    VERSION 0.0.0.4
+    VERSION 0.0.0.5
 )
 set(MSYS2_MINGW_ROOT_DIR "C:/msys64/mingw64/bin")
 set(INSTALL_DIR_OF_THIS ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME})
@@ -17,6 +17,7 @@ get_filename_component(PYTHON_ROOT_DIR "${Python_EXECUTABLE}" DIRECTORY)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
+add_subdirectory(3rd_party/imgui)
 add_subdirectory(src)
 add_subdirectory(python-scripts)
 
