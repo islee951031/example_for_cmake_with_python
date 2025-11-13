@@ -1,9 +1,5 @@
 1) to support ubuntu
 
-2) to simplif python wrap functions
+2) to intrgrate imgui and python wrap function
 
-  - to remove exception
-
-3) to intrgrate imgui and python wrap function
-
-4) to use pybind11 to link c++ and python
+3) to add font color at the python console according to log type

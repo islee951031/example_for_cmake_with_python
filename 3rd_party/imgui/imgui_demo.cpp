@@ -315,7 +315,7 @@ struct ImGuiDemoWindowData
     bool ShowAppConsole = false;
     bool ShowAppCustomRendering = false;
     bool ShowAppDocuments = false;
-    bool ShowAppDockSpace = false;
+    bool ShowAppDockSpace = true;
     bool ShowAppLog = false;
     bool ShowAppLayout = false;
     bool ShowAppPropertyEditor = false;
@@ -330,7 +330,7 @@ struct ImGuiDemoWindowData
     bool ShowMetrics = false;
     bool ShowDebugLog = false;
     bool ShowIDStackTool = false;
-    bool ShowStyleEditor = false;
+    bool ShowStyleEditor = true;
     bool ShowAbout = false;
 
     // Other data

@@ -4,11 +4,13 @@ This repository contains a simple project for making a executable file which is 
 This repository is a reference material for constructing the projects written with c++ and python.
 
 # Pre-requirement
-cmake 
+cmake (above 3.18)
 
-python
+python (3.12.10)
 
-mingw64
+mingw64 (x86_64-posix-seh-rev0)
+
+Vulkan SDK
 
 
 # Build Method 
@@ -16,6 +18,6 @@ mkdir build
 
 cd build 
 
-cmake .. -G Ninja
+cmake .. -G "MinGW Makefiles"
 
-ninja.exe
+cmake --build .
