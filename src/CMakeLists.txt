@@ -1,4 +1,4 @@
-add_executable(${CMAKE_PROJECT_NAME} main.cpp py_interpreter.cpp py_console.cpp)
+add_executable(${CMAKE_PROJECT_NAME} WIN32 main.cpp py_interpreter.cpp py_console.cpp)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC imgui_lib ${Python_LIBRARIES} pybind11::embed)
 
