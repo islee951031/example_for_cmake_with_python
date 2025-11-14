@@ -1,9 +1,7 @@
-1) to support ubuntu
+● to support ubuntu
 
-2) to intrgrate imgui and python wrap function
+● to intrgrate imgui and python wrap function
 
-3) to add font color at the python console according to log type
+● to make python console text line selectable
 
-4) to make python console text line selectable
-
-5) to apply multi-threading processing for python function
+● to apply multi-threading processing for python function

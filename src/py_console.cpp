@@ -1,8 +1,11 @@
 #include "py_console.h"
 
+PyLog::PyLog() {}
+
+PyLog::PyLog(PyStringType type_, char* content_) : type(type_), content(content_) {}
+
 PyConsoleSingleton::PyConsoleSingleton() : interpreter(nullptr)
 {
-  //IMGUI_DEMO_MARKER("Python Console");
   ClearLog();
   memset(input_buf, 0, sizeof(input_buf));
   history_pos = -1;
@@ -36,11 +39,11 @@ void  PyConsoleSingleton::Strtrim (char* s_)                                 { c
 void PyConsoleSingleton::ClearLog()
 {
   for (int i = 0; i < items.Size; i++)
-    ImGui::MemFree(items[i]);
+    ImGui::MemFree(items[i].content);
   items.clear();
 }
 
-void PyConsoleSingleton::AddLog(const char* fmt_, ...)
+void PyConsoleSingleton::AddLog(PyStringType type_, const char* fmt_, ...)
 {
   char _buf[1024];
   va_list _args;
@@ -48,7 +51,7 @@ void PyConsoleSingleton::AddLog(const char* fmt_, ...)
   vsnprintf(_buf, IM_ARRAYSIZE(_buf), fmt_, _args);
   _buf[IM_ARRAYSIZE(_buf)-1] = 0;
   va_end(_args);
-  items.push_back(Strdup(_buf));
+  items.push_back(PyLog(type_, Strdup(_buf)));
 }
 
 void PyConsoleSingleton::Draw(const char* title_, bool* p_open_)
@@ -78,18 +81,32 @@ void PyConsoleSingleton::Draw(const char* title_, bool* p_open_)
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1));
     if (_is_copy_btn_clicked)
       ImGui::LogToClipboard();
-    for (const char* item : items)
+    for (auto item : items)
     {
-      if (!filter.PassFilter(item))
+      if (!filter.PassFilter(item.content))
         continue;
       ImVec4 _color;
       bool _has_color = false;
-      // TODO : 여기에 PyLogType에 따라 "_color = {1.0f, 0.0f, 0.0f, 1.0f}" 혹은 "_color = {0.0f, 0.0f, 1.0f, 1.0f}"를 설정하는 코드를 추가하시오.
-      if (_has_color)
-        ImGui::PushStyleColor(ImGuiCol_Text, _color);
-      ImGui::TextUnformatted(item);
-      if (_has_color)
-        ImGui::PopStyleColor();
+      switch(item.type)
+      {
+        case PyStringType::kNone:
+          assert(false);
+          break;
+        case PyStringType::kNull:
+        case PyStringType::kCommand:
+          break;
+        case PyStringType::kError:
+          _has_color = true;
+          _color = {1.0f, 0.0f, 0.0f, 1.0f};
+          break;
+        case PyStringType::kNormal:
+          _has_color = true;
+          _color = {0.0f, 0.3f, 0.3f, 1.0f};
+          break;
+      }
+      if (_has_color) ImGui::PushStyleColor(ImGuiCol_Text, _color);
+      ImGui::TextUnformatted(item.content);
+      if (_has_color) ImGui::PopStyleColor();
     }
     if (_is_copy_btn_clicked)
       ImGui::LogFinish();
@@ -124,7 +141,7 @@ void PyConsoleSingleton::Draw(const char* title_, bool* p_open_)
 
 void PyConsoleSingleton::ExecCommand(const char* command_line_)
 {
-  AddLog(">>> %s\n", command_line_);
+  AddLog(PyStringType::kCommand, ">>> %s\n", command_line_);
   interpreter->SendCommand((const char8_t*)command_line_);
 
   // Insert into history. First find match and delete it so it can be pushed to the back.
@@ -141,9 +158,9 @@ void PyConsoleSingleton::ExecCommand(const char* command_line_)
   }
   history.push_back(Strdup(command_line_));
   
-  const std::u8string& _log_candidate = interpreter->GetResponseBuf().content;
-  if (_log_candidate.empty() == false)
-    AddLog((const char*)_log_candidate.c_str());
+  PyResponse _response = interpreter->GetResponseBuf();
+  if (_response.content.empty() == false)
+    AddLog((PyStringType)_response.type, (const char*)_response.content.c_str());
   interpreter->ClearResponseBuf();
 
   // On command input, we scroll to bottom even if AutoScroll==false

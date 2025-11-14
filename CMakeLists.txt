@@ -12,7 +12,7 @@ set(CMAKE_CXX_EXTENSIONS OFF) #disable extened syntex by compiler
 
 project(
     ExampleForCMakeWithPython
-    VERSION 0.0.0.9
+    VERSION 0.0.0.10
 )
 set(INSTALL_DIR_OF_THIS ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME})
 

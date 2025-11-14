@@ -1,8 +1,8 @@
 #include "py_interpreter.h"
 
-PyResponse::PyResponse() : type(PyResponseType::kNone), content(u8"") {}
+PyResponse::PyResponse() : type(PyStringType::kNone), content(u8"") {}
 
-PyResponse::PyResponse(PyResponseType type_, const std::u8string& content_) : type(type_), content(content_) {}
+PyResponse::PyResponse(PyStringType type_, const std::u8string& content_) : type(type_), content(content_) {}
 
 PyInterpreterSingleton::PyInterpreterSingleton() : response_buf() {}
 
@@ -88,7 +88,7 @@ sys.stderr = SimpleRedirector(write_py_interp_response_at_log)
   return;
 }
 
-void PyInterpreterSingleton::StockUpResponse(PyResponseType type_, std::u8string content_)
+void PyInterpreterSingleton::StockUpResponse(PyStringType type_, std::u8string content_)
 {
   std::lock_guard<std::mutex> lock(response_buf_mutex);
   response_buf = PyResponse(type_, content_.append(u8"\n"));
@@ -101,7 +101,7 @@ PyResponse& PyInterpreterSingleton::GetResponseBuf()
 
 void PyInterpreterSingleton::ClearResponseBuf()
 {
-  response_buf.type = PyResponseType::kNone;
+  response_buf.type = PyStringType::kNone;
   response_buf.content.clear();
 }
 
@@ -116,20 +116,20 @@ void PyInterpreterSingleton::SendCommand(const std::u8string& content_)
     py::exec((const char*)content_.c_str());
     if (response_buf.content.empty())
     {
-      response_buf.type = PyResponseType::kNull;
+      response_buf.type = PyStringType::kNull;
       response_buf.content.clear();
     }
   } 
   catch (const py::error_already_set& e) 
   {
-    StockUpResponse(PyResponseType::kError, std::u8string((char8_t*)e.what()));
+    StockUpResponse(PyStringType::kError, std::u8string((char8_t*)e.what()));
   }
 }
 
 void PyInterpreterSingleton::WritePyInterpResponseLog(const std::u8string& content_)
 {
   PyInterpreterSingleton& _instance = PyInterpreterSingleton::GetInstance();
-  _instance.StockUpResponse(PyResponseType::kNormal, content_);
+  _instance.StockUpResponse(PyStringType::kNormal, content_);
 }
 
 bool PyInterpreterSingleton::ThereIsPyConfigErr(PyStatus& status_, const char* err_msg_)

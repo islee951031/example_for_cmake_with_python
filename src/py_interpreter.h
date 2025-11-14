@@ -25,9 +25,10 @@ namespace fs = std::filesystem;
 #include <pybind11/embed.h>
 namespace py = pybind11;
 
-enum PyResponseType
+enum PyStringType
 {
   kNone = -1, 
+  kCommand,
   kNull,
   kNormal,
   kError
@@ -35,11 +36,11 @@ enum PyResponseType
 
 struct PyResponse
 {
-  PyResponseType type;
+  PyStringType type;
   std::u8string content;
 
   PyResponse();
-  PyResponse(PyResponseType type_, const std::u8string& content_);
+  PyResponse(PyStringType type_, const std::u8string& content_);
   ~PyResponse() = default;
 };
 
@@ -60,7 +61,7 @@ class PyInterpreterSingleton
   static PyInterpreterSingleton& GetInstance();
   void SetProperties(const char* main_argv_0_, const char* err_msg_);
 
-  void StockUpResponse(PyResponseType type_, std::u8string response_);
+  void StockUpResponse(PyStringType type_, std::u8string response_);
   PyResponse& GetResponseBuf();
   void ClearResponseBuf();
   void SendCommand(const std::u8string& command_);
