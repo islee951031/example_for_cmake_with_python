@@ -26,7 +26,7 @@ PyConsoleSingleton& PyConsoleSingleton::GetInstance()
   return _instance;
 }
 
-void PyConsoleSingleton::LinkWithInterpreter(PyInterpreterSingleton& interpreter_)
+void PyConsoleSingleton::LinkWith(PyInterpreterSingleton& interpreter_)
 {
   interpreter = &interpreter_;
 }

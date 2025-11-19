@@ -423,7 +423,7 @@ int main(int, char** argv_)
 
     // Initialize python console
     PyConsoleSingleton& _console_instance = PyConsoleSingleton::GetInstance();
-    _console_instance.LinkWithInterpreter(_interp_instance);
+    _console_instance.LinkWith(_interp_instance);
 
 
 

@@ -27,7 +27,7 @@ struct PyConsoleSingleton
   PyConsoleSingleton();
   ~PyConsoleSingleton();
   static PyConsoleSingleton& GetInstance();
-  void LinkWithInterpreter(PyInterpreterSingleton& interpreter_);
+  void LinkWith(PyInterpreterSingleton& interpreter_);
   static int   Stricmp (const char* s1_, const char* s2_);
   static int   Strnicmp(const char* s1_, const char* s2_, int n_);
   static char* Strdup  (const char* s_);
